@@ -1,0 +1,9 @@
+conda create -n py34 python=3.4 anaconda
+source activate py34
+
+pip install pyquery
+pip install requests
+pip install selenium
+pip install splinter
+brew update && brew install phantomjs
+
