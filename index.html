@@ -16,7 +16,7 @@
 
 		<link rel="stylesheet" href="css/reveal.min.css">
 		<link rel="stylesheet" href="css/theme/solarized.css" id="theme">
-        
+
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/tomorrow-night-bright.css">
 
@@ -35,119 +35,123 @@
 		<div class="reveal">
 
 
-<!-- HOME PAGE -->            
+<!-- HOME PAGE -->
 <div class="slides">
 
     <section>
         <h2>Asyncronous Web Scraping with Asyncio</h2>
-        <a href="http://bugra.github.io" >Bugra Akyildiz</a><br>
         <a href="https://twitter.com/bugraa">@bugraa</a><br>
         <a href="https://bugra.github.io">bugra.github.io</a><br><br>
-        <a style="color:#57068C;">bugra@nyu.edu</a><br>
-    </section>
-              
+        <b>Bugra Akyildiz</b><br>
+        <a style="color:#57068C;">bugra@nyu.edu</a><br><br>
+        <a href="http://bit.ly/pygotham-2014"> http://bit.ly/pygotham-2014</a> | Repo<br>
 
-<!-- Word Origin --- Greek -->                
+
+    </section>
+
+
+<!-- Word Origin --- Greek -->
 <section data-markdown>
-## What is it?    
-### Greek       
-- asyn => not with    
+## What is it?
+### Greek
+- asyn => not with
 - chronos => time
 
 > not with time?
 </section>
 
-<!-- Asynchronous I/O -->                
+<!-- Asynchronous I/O -->
 <section data-markdown>
 ### Asynchronous I/O
 
-- It is a programming paradigm for performing I/O operations so that the process that issued an I/O request is not blocked untill the data is available.
+- It is a programming paradigm for performing I/O operations so that the process that issued an I/O request is not blocked until the data is available.
 - After an I/O request is submitted, the process continues to execute the program and can later check the status of the submitted request.
-  
-> Asynchronous programming increases the task execution throughput where it minimizes time wasted for a blocking I/O operation.    
-</section>                
 
-<!-- Images for execution -->                
+> Asynchronous programming increases the task execution throughput where it minimizes time wasted for a blocking I/O operation.
+</section>
+
+<!-- Images for execution -->
 <section>
 <h2>Synchronous</h2>
 <img src="static/img/sync.png" alt="Synchronous" style="width: 256px; height: 512px;">
 </section>
-                
+
 <section>
-<h2> Problem in Syncronous Execution</h2>                
-<img src="static/img/blocking.png" alt="Blocking" style="width: 256px; height: 512px;">   
-</section>                
+<h2> Problem in Syncronous Execution</h2>
+<img src="static/img/blocking.png" alt="Blocking" style="width: 256px; height: 512px;">
+</section>
 
 <section>
 <h2>Threaded</h2>
 <img src="static/img/threaded.png" alt="Threaded" style="width: 512px; height: 256px;">
-</section>                
+</section>
 
 <section>
 <h2>Asnychronous </h2>
 <img src="static/img/async.png" alt="Asynchronous" style="width: 256px; height: 512px;">
 <blockquote> Interleaved Execution
 </blockquote>
-</section>                
-                
-<!-- Asynchronous Programming Advantages -->                
+</section>
+
+<!-- Asynchronous Programming Advantages -->
 <section data-markdown>
 ### Asynchronous Programming Advantages
-- If there is a blocking operation for one task, you could execute others. 
+- If there is a blocking operation for one task, you could execute others.
 - It is more performant where you need to do a lot of I/O operations.
 - Blocking operations do not matter as much.
 
-</section>                
+</section>
 
 <!-- Asyncio Programming Advantages over Multithreading Programming -->
 <section data-markdown>
 ### Advantages over Multithreading Programming
-- In a Single Thread. 
+- One thread is easier than multithread.
 - Low overhead:
-    - Easy to share data. 
+    - Easy to share data.
     - Easier to manage and control the processes in a single thread.
     - No need for communication between threads.
     - You have control all over the data, variables and whole namespace.
 - Full control(instead of OS to decide which treads to be used) over the program.
-    
-</section>      
-    
+
+</section>
+
 <section data-markdown>
-### Global Interpreter Lock    
-- CPython interpreter uses GIL and only one thread could execute because of that.
+### Global Interpreter Lock (GIL)
+- CPython interpreter uses GIL and only one thread could execute.
 - Due to GIL, the overhead Python pays for multithreading is quite large even if your machine has multiprocessors.
-- The execution speed does not increase too much.
-- You could run multiple interpreters to execute but then, the tasks need to be independent.
-    
-    
-</section>    
-    
-<!-- Historical Background -->                
+    - In the same time, GIL makes it more efficient for single thread.
+- Due to GIL, execution speed does not increase linearly with the number of threads you are using.
+- You could always run multiple interpreters to execute the job.
+</section>
+
+<!-- Historical Background -->
 <section data-markdown>
 ## Where do we stand in Python?
-- Before Python 3.x, there is no good asynchronous module in the standard library.(`asyncore` and `asynchat`, both deprecated in Python 3.x)    
+- Before Python 3.x, there is no good asynchronous module in the standard library.(`asyncore` and `asynchat`, both deprecated in Python 3.x)
 - First Asynchronous Programming Effort targeted to Python 3.x: [Tulip](https://code.google.com/p/tulip/) (by Guido van Rossum)
 - __Tulip__ became `asyncio` module starting from Python 3.4
 - If you want to use it in Python 2.x, there is [Trollius](http://trollius.readthedocs.org/en/latest/index.html).(works on Python 3.x, too)
-- We will use Python 3.4 as it is the __Future__. (We will come back to this later)
-</section>      
-             
-<!-- Asyncio Module -->                
+- We will use Python 3.4 for notebooks and the code in the slides.
+    - It is _the_ __Future__. (We will come back to this later)
+</section>
+
+<!-- Asyncio Module -->
 <section data-markdown>
 ## Asyncio Module
 - New in Python 3.4!
 - Single-threaded concurrent code using coroutines
 - Multiplexing I/O access over sockets and other resources
 - Running network clients and servers
-- Other asynronous execution related primitives
-</section>    
+- Other asynchronous execution related primitives
+- Many more ...
+</section>
 
 <section>
 <h2><b>Asyncio</b></h2>
-<blockquote style="color: #268bd2;">I'm not trying to reinvent the wheel. I'm trying to build a good one. Guido von Rossum</blockquote>    
-</section>  
-    
-    
+<blockquote style="color: #268bd2;">I'm not trying to reinvent the wheel. I'm trying to build a good one. Guido von Rossum</blockquote>
+</section>
+
+
 <!-- Asyncio Module -->
 <section data-markdown>
 ## Asyncio Module
@@ -156,195 +160,190 @@
 - Event Loop
 - Tasks
 - Futures
-- Transports 
+- Transports
 - Protocols
 - and many more ...
-                
-</section>                
-    
+
+</section>
+
 <!-- Event Loop -->
 <section data-markdown>
 ### Event loop
 - Pluggable. (works with Twisted, Gevent and others)
 - Multiplexes I/O
 - Optimizes the best method for I/O mechanism.
+    - No need to worry about when to trigger and call the function.
 - Scheduler for __all__ of coroutines, tasks and Futures.
-</section>    
+</section>
 
 <!-- Event Loop -->
 <section>
 <h2>Reactor Pattern</h2>
-<img src="static/img/reactor-pattern.png" alt="Reactor Pattern" style="width: 512px; height: 512px;">    
+<img src="static/img/reactor-pattern.png" alt="Reactor Pattern" style="width: 512px; height: 512px;">
 </section>
-    
+
 <section data-markdown>
+- Coroutines cannot be run outside of event loops
+- They are the schedulers and also the place that coroutines exist
 ```python
-### Coroutines cannot be run outside of event loops
-### They are the schedulers and also the place that coroutines exist
 loop = asyncio.get_event_loop() # create a loop
 f = asyncio.wait([inform(link_blob) for link_blob in links]) # List of corotine functions
 loop.run_until_complete(f) # Run them
-```    
-</section>    
-    
-<!-- Concurrent Primitives -->                
+```
+</section>
+
+<!-- Concurrent Primitives -->
 <section data-markdown>
 ### Concurrent Primitives (Data Structures)
 - Locks
 - Semaphores
 - Queues
-                
-</section>                
 
-    
+</section>
+
+
 <section>
 <h2>Lock</h2>
-<img src="static/img/lock.jpg" alt="Lock" style="width: 512px; height: 384px;">    
-</section>  
-    
-<!-- Locks -->                
+<img src="static/img/lock.jpg" alt="Lock" style="width: 512px; height: 384px;">
+</section>
+
+<!-- Locks -->
 <section data-markdown>
-### Locks
+### Lock
 - Synchronization primitive.
 - It has two states `locked` and `unlocked`.
 - When it is locked, it cannot be used any coroutine.
 - It could be considered as a _blocking_ mechanism towards the execution
-  of the tasks.    
-</section>    
+  of the tasks.
+</section>
 
 <section>
 <h2>Semaphore</h2>
-<img src="static/img/semaphore.png" alt="Semaphore" style="width: 368; height: 207px;">    
-</section>  
-    
+<img src="static/img/semaphore.png" alt="Semaphore" style="width: 368; height: 207px;">
+</section>
+
 <!-- Semaphores -->
 <section data-markdown>
-### Semaphores
+### Semaphore
 - Manages the shared resources through locks.
 - It tracks the sources by counting the times that `acquire()` and
   `release()` get called.
 - If there are not sources available for `acquire()` call, it blocks the
   execution.(like in a synchronous procedure)
 - Very useful if you want to limit the coroutines that run at a single
-  time. 
+  time.
 - We will revisit this concept in Responsive Web Scraping which is quite
-  important.                
-</section>                
+  important.
+</section>
 
-                
+<section>
+<img src="static/img/queue.png" alt="Queue" style="width: 400; height: 400px;">
+</section>
+
 <!-- Queues -->
 <section data-markdown>
-### Queues
+### Queue
+- Asynchronous Queue primitive.
 - Manages the producer and consumer coroutines.
-- If you have an application that depends on queue structure and want to
-  use them asynchronously, __queues__ are the things that you should
-exploit.
 - If you do not want to use coroutines, they also support `get_nowait()`
   and `put_nowait()` functions to remove the asynchronous nature of
-calls.                
-</section>                
-                
+calls.
+    - Going to synchronous.
+</section>
+
 <!-- Coroutines -->
 <section data-markdown>
 ### Coroutines
-- They need to have `yield from` in their function body. 
-- You need to also call in the form of `yield from awesome_coroutine()`.
-- `awesome_coroutine()` returns only a generator even if it is properly decorated.
-- For readability purposes, they should be decorated with `@asyncio.coroutine`. (it is not strictly enforced, though)     
-- To be able to know if something is coroutine function,
-  `asyncio.iscoroutinefunction()` is your friend.
-- For coroutine objects, similarly `asyncio.iscoroutine()`.
+- They need to have `yield from` in their function body.
+- `yield from awesome_coroutine()`.
+- `awesome_coroutine()` returns only a generator.
+- For readability purposes, they should be decorated with `@asyncio.coroutine`.
+- `asyncio.iscoroutinefunction()`
+- `asyncio.iscoroutine()`
+
+
 > They are using `introspect` module under the hood.
-</section>                
- 
+</section>
+
 <section data-markdown>
 ```python
+sleep_time = 1.
 def i_am_not_a_coroutine():
-    ii = 0
-    while True:
-        sleep_time = 1.
-        ii += 1
-        if ii % 10 == 0: 
+    for ii in range(1, 31):
+        if ii % 10 == 0:
             print('I am not a coroutine :(')
         time.sleep(sleep_time)
         print('I  slept {} seconds'.format(sleep_time))
-        if ii == 30:
-            break
-start = time.perf_counter()            
-i_am_not_a_coroutine()        
+start = time.perf_counter()
+i_am_not_a_coroutine()
 print('It has been {}'.format(time.perf_counter() - start))
 ```
-</section>    
-    
-    
+</section>
+
+
 <section data-markdown>
 ```python
 @asyncio.coroutine
 def i_am_a_coroutine():
-    ii = 0
-    while True:
-        sleep_time = 1.
+    for ii in range(1, 31):
         print('I  slept {} seconds'.format(sleep_time))
-        ii += 1
-        if ii % 10 == 0: 
+        if ii % 10 == 0:
             print('I am a coroutine!')
         yield from asyncio.sleep(sleep_time)
-        if ii == 30:
-            break
-start = time.perf_counter()            
+start = time.perf_counter()
 new_loop = asyncio.get_event_loop()
-f = asyncio.wait([i_am_a_coroutine() for _ in range(10)]) # Put 10 coroutines in a sequence 
+f = asyncio.wait([i_am_a_coroutine() for _ in range(10)]) # Put 10 coroutines in a sequence
 new_loop.run_until_complete(f) # Run
 print('It has been {}'.format(time.perf_counter() - start))
-``` 
-</section>    
-    
-    
+```
+</section>
+
+
 <section data-markdown>
 ### Web Scraping
 - HTTP Library
 - HTML Parser
-    
-</section>    
-    
+
+</section>
+
 <section data-markdown>
 ### HTTP Library
-- [urrlib](https://docs.python.org/2/library/urllib.html), [urrlib2](https://docs.python.org/2/library/urllib2.html) and their API is somehow broken in Python 2.    
+- [urrlib](https://docs.python.org/2/library/urllib.html), [urrlib2](https://docs.python.org/2/library/urllib2.html) and their API is somehow broken in Python 2.
 - New [`urllib`](https://docs.python.org/3/library/urllib.html) library is more sane in Python 3 and provides a more coherent namespace.
 - Yet, its API is still not as good as [Requests](http://docs.python-requests.org/en/latest/)
-    
-> Requests and most of the HTTP libraries are synchronous. 
+
+> Requests and most of the HTTP libraries are synchronous.
 > HTTP protocol is also synchronous, no surprise there
-    
-</section>   
-    
+
+</section>
+
 <section>
 <h3> HTML Parser</h3>
 <ul>
     <li>Do not even attempt to use regex to parse HTML. (If you are not Chuck Norris)</li>
-</ul>        
-<img src="static/img/chuck-norris.png" alt="Paris Hilton Regex" style="width: 512px; height: 64px;">          
-<img src="static/img/paris-hilton-regex.png" alt="Paris Hilton Regex" style="width: 768px; height: 128px;">          
-</section>   
-    
-<section>
-<h3>One of the Most Famous Answers in SO</h3>    
-<img src="static/img/famous-regex-comment.png" alt="Famous Regex" style="width: 1280px; height: 768px;">              
+</ul>
+<img src="static/img/chuck-norris.png" alt="Paris Hilton Regex" style="width: 512px; height: 100px;">
+<img src="static/img/paris-hilton-regex.png" alt="Paris Hilton Regex" style="width: 768px; height: 128px;">
 </section>
-    
+
+<section>
+<h3>One of the Most Famous Answers in SO</h3>
+<img src="static/img/famous-regex-comment.png" alt="Famous Regex" style="width: 1280px; height: 768px;">
+</section>
+
 <section data-markdown>
-### HTML Parser 
-- There are tons of libraries in Python for parsing HTML(use one of these):
+### HTML Parser
+- There are tons of libraries in Python for parsing HTML
     - [lxml](http://lxml.de/) => very fast
     - [BeautifulSoup](http://en.wikipedia.org/wiki/Beautiful_Soup) => most adopted and used
-    - [PyQuery](https://pypi.python.org/pypi/pyquery) => on top of lxml, fast (I prefer this one)
-    - [Scrapy](http://scrapy.org/) => full featured 
+    - [PyQuery](https://pypi.python.org/pypi/pyquery) => on top of lxml, fast
+    - [Scrapy](http://scrapy.org/) => full featured
     - [Mechanize](http://wwwsearch.sourceforge.net/mechanize/) => full featured(includes logins and forms)
-    - [HTML Parser](https://docs.python.org/3/library/html.parser.html) => barebone, not very good. 
+    - [HTML Parser](https://docs.python.org/3/library/html.parser.html) => barebone, not very good.
         - But A for the effort putting in the standard library
-</section>    
+</section>
 
-    
+
 <section data-markdown>
 ```python
 import requests
@@ -356,9 +355,9 @@ for ii in pq(raw_html)('.slot-talk'):
     title, _, presenter = str(ii.text_content()).strip().split('\n')
     talks.append((title.strip(), presenter.strip().title()))
 ```
-    
+
 ```python
-# Talks - First 16    
+# Talks - First 16
 [('Python Apps and Docker', 'Matt Wright'),
  ('Insight into the anatomy of a huge Python project', 'Thomas Hatch'),
  ('Getting Rich with Comparison Methods', 'Matt Story'),
@@ -381,25 +380,25 @@ for ii in pq(raw_html)('.slot-talk'):
   'Ricky Chachra'),
  ('Sparkling Pandas - using Apache Spark to scale Pandas', 'Holden Karau'),]
 ```
-</section> 
+</section>
 
 <section data-markdown>
 ### Single-Page Application (SPA)
 - Content is retrieved via AJAX request when user lands on page.
 - When you make a `GET` request via scraper, you do not necessarily get the content that an user sees.
-- Do not despair! 
-- With Python, we have great tools to deal with this problem as well.   
-  
-</section>    
-    
+- Do not despair!
+- With Python, we have great tools to deal with this problem as well.
+
+</section>
+
 <section data-markdown>
 
 ### Selenium and PhantomJS to rescue
-- [Selenium](http://selenium-python.readthedocs.org/en/latest/index.html)    
-- [PhantomJS](http://phantomjs.org/)  
+- [Selenium](http://selenium-python.readthedocs.org/en/latest/index.html)
+- [PhantomJS](http://phantomjs.org/)
 - Install Selenium and PhantomJS
-- Use the PhantomJS driver    
-    
+- Use the PhantomJS driver
+
 ```
 # On Mac
 ## After installing brew and pip
@@ -412,11 +411,11 @@ from selenium import webdriver
 driver = webdriver.PhantomJS()
 driver.get(SINGLE_PAGE_APPLICATION_URL)
 # With content retrieved via AJAX!
-raw_html =  driver.page_source 
+raw_html =  driver.page_source
 driver.quit()
 ```
-</section>   
-    
+</section>
+
 <section data-markdown>
 ### Splinter
 - Based on Selenium
@@ -428,97 +427,97 @@ pip install splinter
 ```
 
 ```python
-from splinter import Browser                   
+from splinter import Browser
 with Browser() as browser:
     browser.visit(SINGLE_PAGE_APPLICATION_URL)
     raw_html = browser.html
-```    
-</section>    
-    
+```
+</section>
+
 <section>
 <h3>Responsive Web Scraping</h3>
 <ul>
     <li>Do not open too many connections to same base url!</li>
-    <li>Do not scrape if `robots.txt` disallows scraping.</li>        
-    <li>Do not crawl if they have an API.</li>    
-    <li>Crawl once, process multiple times. (Preferably offline)</li>    
+    <li>Do not scrape if `robots.txt` disallows scraping.</li>
+    <li>Do not crawl if they have an API.</li>
+    <li>Crawl once, process multiple times. (Preferably offline)</li>
     <li>Avoid XML if you could.</li>
     <li>If you have to, there is a <a href="https://github.com/martinblech/xmltodict"><b>xmltodict</b></a> (fast enough)</li>
-</ul>    
+</ul>
 <blockquote> <a href="https://www.google.com/killer-robots.txt">Google Killer Robots</a></blockquote>
-<img src="static/img/google-killer-robots.png" alt="Reactor Pattern" style="width: 512px; height: 256px;">    
-</section>    
+<img src="static/img/google-killer-robots.png" alt="Reactor Pattern" style="width: 512px; height: 256px;">
+</section>
 
 <section data-markdown>
 ### Semaphores for Responsive Web Scraping
-- Use __Semaphores__ to limit the connection numbers or limit the resources. 
+- Use __Semaphores__ to limit the connection numbers or limit the resources.
     (If we are crawling the same web server, use this one in order
-not to damage and make the load of the server too much!)    
-    
+not to damage and make the load of the server too much!)
+
 ```python
 sem = asyncio.Semaphore(10) # Permit only 10 connections at a time
 with (yield from sem):
-    page = yield from get_body(url)    
-```     
+    page = yield from get_body(url)
+```
 instead of
 ```python
 page = yield from get_body(url
-```    
-</section>    
-      
+```
+</section>
+
 <section data-markdown>
 ### What next?
-- Try to think the problems in an asynchronous manner. 
+- Try to think the problems in an asynchronous manner.
 - Try to use `asyncio` in your next project which depends on I/O.
-- Use Python 3, it breaks incompatibility, but it is simply __better__. (at least your side projects)   
+- Use Python 3, it breaks incompatibility, but it is simply __better__. (at least your side projects)
 - Try to learn more advanced and low-level `asyncio` primitives; transports and protocols.
 
 > Syncronous is not cool... You know what is cool? __Asynchronous__.
-</section>    
+</section>
 
 <section data-markdown>
-### Materials on Coroutine    
+### Materials on Coroutine
 - [Coroutines by David Beazley](http://www.dabeaz.com/coroutines/) (For core concepts, it is good start, outdated ~2008 though)
 - [Difference between `yield` and `yield from` by Guido van Rossum](https://groups.google.com/forum/#!msg/python-tulip/bmphRrryuFk/aB45sEJUomYJ)
--     
-    
-</section>    
-    
-    
+-
+
+</section>
+
+
 <section data-markdown>
 ### Third Party Scraping Sources
 - [Yahoo Query Language](https://developer.yahoo.com/yql/)
 - [import.io](https://import.io/)
 - [Kimono Labs](https://www.kimonolabs.com/)
 - [ScraperWiki](https://scraperwiki.com/)
-    
+
 ### Other Useful Libraries
 - [Pattern](http://www.clips.ua.ac.be/pages/pattern)
 - [Bixo](http://bixo.101tec.com/)
 - [Upton in Ruby](https://github.com/propublica/upton)
 - [Mechanize in Ruby](https://github.com/sparklemotion/mechanize)
-- [Portia - Visual Scraping](https://github.com/scrapinghub/portia)    
-    
-</section>    
-<!-- Credits -->                
-<section data-markdown>
-### Credits    
-- http://krondo.com/?p=1209 
-    - (Most of images are from here, article is well-written, I "borrowed" couple of things here and there)
-- 
-    
+- [Portia - Visual Scraping](https://github.com/scrapinghub/portia)
+
 </section>
-                
+<!-- Credits -->
+<section data-markdown>
+### Credits
+- http://krondo.com/?p=1209
+    - (Most of images are from here, article is well-written, I "borrowed" couple of things here and there)
+-
+
+</section>
+
 
 <section>
 <ul>
-    <li>For notebooks and code: Open an issue in => # Give Github repository link</li>
+    <li>For notebooks and code: Open an issue in => https://github.com/bugra/pygotham-2014 </li>
     <li>For everything else, do not hesitate to contact me: </li>
 </ul>
 <a style="color:#57068C;">bugra@nyu.edu</a><br><br><br>
-Thanks!    
+Thanks!
 </section>
-    
+
     <script src="lib/js/head.min.js"></script>
     <script src="js/reveal.min.js"></script>
     <script>
