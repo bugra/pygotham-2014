@@ -327,6 +327,7 @@ print('It has been {}'.format(time.perf_counter() - start))
 - [urrlib](https://docs.python.org/2/library/urllib.html), [urrlib2](https://docs.python.org/2/library/urllib2.html) and their API is somehow broken in Python 2.
 - New [`urllib`](https://docs.python.org/3/library/urllib.html) library is more sane in Python 3 and provides a more coherent namespace.
 - Yet, its API is still not as good as [Requests](http://docs.python-requests.org/en/latest/)
+- [Streams Library](https://docs.python.org/3/library/asyncio-stream.html) provides nice wrappers, I will be using this one to open asynchronous connections.
 
 > Requests and most of the HTTP libraries are synchronous.
 > HTTP protocol is also synchronous, no surprise there
@@ -481,6 +482,34 @@ instead of
 page = yield from get_body(url
 ```
 </section>
+
+<section data-markdown>
+### Asnychronous Web Scraping
+```python
+@asyncio.coroutine
+def get_body(url):
+    url = urlsplit(url)
+    path = '/' * (not url.path) + url.path + '?' * bool(url.query) + url.query # Booleans are sub-class of integers
+    # Check out Strems: https://docs.python.org/3/library/asyncio-stream.html
+    reader, writer = yield from asyncio.open_connection(
+        host=url.hostname,
+        port=url.port or (443 if url.scheme == 'https' else 80),
+        ssl=(url.scheme == 'https'))
+    with contextlib.closing(writer):
+        writer.write(b'GET ' + path.encode('ascii') + b' HTTP/1.1\r\n'
+                     b'Host: ' + url.netloc.encode('ascii') + b'\r\n'
+                     b'Connection: close\r\n\r\n')
+        while True:
+            line = yield from reader.readline()
+            line = line.rstrip(b'\n\r')
+            print(line.decode('latin-1'))
+            if not line:
+                break
+        body = yield from reader.read()
+    return body
+```
+</section>
+
 
 <section data-markdown>
 ### What next?
